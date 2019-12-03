@@ -2,7 +2,7 @@
  * Peacock3Dim.cpp
  *
  *  Created on: 3 Dec 2019
- *      Author: naseser
+ *      Author: Sergey
  */
 
 #include "Peacock3Dim.h"

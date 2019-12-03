@@ -2,7 +2,7 @@
  * CSVReader.h
  *
  *  Created on: 24 Oct 2019
- *      Author: naseser
+ *      Author: Sergey
  */
 
 #ifndef CSVREADER_H_

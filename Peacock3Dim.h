@@ -2,7 +2,7 @@
  * Peacock3Dim.h
  *
  *  Created on: 3 Dec 2019
- *      Author: naseser
+ *      Author: Sergey
  */
 
 #ifndef PEACOCK3DIM_H_
