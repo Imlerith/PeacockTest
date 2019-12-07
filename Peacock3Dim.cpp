@@ -1,15 +1,11 @@
 /*
  * Peacock3Dim.cpp
  *
- *  Created on: 3 Dec 2019
- *      Author: Sergey
+ *  Created on: 5 Dec 2019
+ *      Author: sergeynasekin
  */
 
 #include "Peacock3Dim.h"
-
-Peacock3Dim::Peacock3Dim() = default;
-
-Peacock3Dim::~Peacock3Dim() = default;
 
 Peacock3Dim::Peacock3Dim(vector<vector<double> > sample_1,
 		vector<vector<double> > sample_2) {
@@ -52,27 +48,30 @@ vector<double> Peacock3Dim::extract_col(vector<vector<double> > matrix,
 		int col_idx) {
 	vector<double> col;
 	for (unsigned int i = 0; i < matrix.size(); i++) {
-		for (int j = col_idx; j < col_idx + 1; j++) {
-			col.push_back(matrix[i][j]);
-		}
+		col.push_back(matrix[i][col_idx]);
 	}
 	return col;
 }
 
 template<typename T>
-vector<int> Peacock3Dim::sort_indices(const vector<T> &v) {
+vector<size_t> Peacock3Dim::sort_indices(const vector<T> &v) {
 
 	// initialize original index starting from 0
-	vector<int> idx(v.size());
+	vector<size_t> idx(v.size());
 	iota(idx.begin(), idx.end(), 0);
 
 	// sort index comparing values in array
-	sort(idx.begin(), idx.end(), [&v](int i1, int i2) {return v[i1] < v[i2];});
+	sort(idx.begin(), idx.end(),
+			[&v](size_t i1, size_t i2) {return v[i1] < v[i2];});
 
 	return idx;
 }
 
-int Peacock3Dim::get_peacock_3d_stat() {
+bool Peacock3Dim::isEqual(double a, double b) {
+	return fabs(a - b) < tol;
+}
+
+double Peacock3Dim::get_peacock_3d_stat() {
 	int max_hnnn = 0;
 	int max_hnpn = 0;
 	int max_hpnn = 0;
@@ -83,20 +82,33 @@ int Peacock3Dim::get_peacock_3d_stat() {
 	int max_hpnp = 0;
 	int max_hppp = 0;
 
+	int hnnn;
+	int hnpn;
+	int hpnn;
+	int hppn;
+
+	int hnnp;
+	int hnpp;
+	int hpnp;
+	int hppp;
+
+	int w;
+
 	for (const double& zu : xy1) {
 		for (const double& zv : xy2) {
-			int hnnn = 0;
-			int hnpn = 0;
-			int hpnn = 0;
-			int hppn = 0;
+
+			hnnn = 0;
+			hnpn = 0;
+			hpnn = 0;
+			hppn = 0;
 
 			int t = 0;
 
 			while (t < n) {
-				int& w = indices_3[t];
+				w = indices_3[t];
 
-				if (xy1[w] <= zu) {
-					if (xy2[w] <= zv) {
+				if ((xy1[w] < zu) || isEqual(xy1[w], zu)) {
+					if ((xy2[w] < zv) || isEqual(xy2[w], zv)) {
 
 						if (w <= n1) {
 							hnnn += d1;
@@ -118,7 +130,7 @@ int Peacock3Dim::get_peacock_3d_stat() {
 
 					}
 				} else {
-					if (xy2[w] <= zv) {
+					if ((xy2[w] < zv) || isEqual(xy2[w], zv)) {
 
 						if (w <= n1) {
 							hpnn += d1;
@@ -145,18 +157,18 @@ int Peacock3Dim::get_peacock_3d_stat() {
 
 			}
 
-			int hnnp = 0;
-			int hnpp = 0;
-			int hpnp = 0;
-			int hppp = 0;
+			hnnp = 0;
+			hnpp = 0;
+			hpnp = 0;
+			hppp = 0;
 
 			t = n - 1;
 
 			while (t > 0) {
-				int& w = indices_3[t];
+				w = indices_3[t];
 
-				if (xy1[w] <= zu) {
-					if (xy2[w] <= zv) {
+				if ((xy1[w] < zu) || isEqual(xy1[w], zu)) {
+					if ((xy2[w] < zv) || isEqual(xy2[w], zv)) {
 
 						if (w <= n1) {
 							hnnp += d1;
@@ -178,7 +190,7 @@ int Peacock3Dim::get_peacock_3d_stat() {
 
 					}
 				} else {
-					if (xy2[w] <= zv) {
+					if ((xy2[w] < zv) || isEqual(xy2[w], zv)) {
 
 						if (w <= n1) {
 							hpnp += d1;
@@ -211,8 +223,6 @@ int Peacock3Dim::get_peacock_3d_stat() {
 
 	int stats[] = { max_hnnn, max_hnpn, max_hpnn, max_hppn, max_hnnp, max_hnpp,
 			max_hpnp, max_hppp };
-	return *max_element(stats, stats + 8);
+	return *max_element(stats, stats + 8) / (double) L;
 }
-
-
 

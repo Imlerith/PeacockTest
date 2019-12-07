@@ -1,8 +1,8 @@
 /*
  * CSVReader.cpp
  *
- *  Created on: 24 Oct 2019
- *      Author: Sergey
+ *  Created on: 5 Dec 2019
+ *      Author: sergeynasekin
  */
 
 #include "CSVReader.h"
@@ -11,7 +11,7 @@ CSVReader::CSVReader(string fname) :
 		filename(fname) {
 }
 
-CSVReader::CSVReader(string fname, string delim) :
+CSVReader::CSVReader(string fname, char delim) :
 		filename(fname), delimiter(delim) {
 }
 
@@ -31,15 +31,13 @@ vector<vector<double> > CSVReader::readFile() {
 		stringstream iss(line);
 		string val;
 		vector<double> row;
-		while (getline(iss, val, ',')) {
-			double val_num = stod(val);
+		while (getline(iss, val, delimiter)) {
+			double val_num = atof(val.c_str());
 			row.push_back(val_num);
 		}
 		sample.push_back(row);
 	}
-	// close fstream
 	file.close();
 
 	return sample;
 }
-

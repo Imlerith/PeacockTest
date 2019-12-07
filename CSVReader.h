@@ -1,8 +1,8 @@
 /*
  * CSVReader.h
  *
- *  Created on: 24 Oct 2019
- *      Author: Sergey
+ *  Created on: 5 Dec 2019
+ *      Author: sergeynasekin
  */
 
 #ifndef CSVREADER_H_
@@ -13,17 +13,18 @@
 #include <sstream>
 #include <vector>
 #include <string>
+
 using namespace std;
 
 class CSVReader {
 private:
-	string filename{""};
-	string delimiter{","};
+	string filename { "" };
+	char delimiter { ',' };
 
 public:
 	CSVReader(string fname);
 
-	CSVReader(string fname, string delim);
+	CSVReader(string fname, char delim);
 
 	CSVReader(const CSVReader& other);
 
